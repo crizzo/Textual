@@ -3,6 +3,8 @@
 
 #define LOCAL_VOLUME_DICTIONARY @"/Volumes"
 
+#define TXNSFileManager() [NSFileManager defaultManager]
+
 @implementation TPI_SP_SysInfo
 
 #pragma mark -

@@ -37,10 +37,8 @@
 	NSRect frame = self.frame;
 	
 	frame.size.height = 1e+37;
-	
-	CGFloat height = [[[[self tableColumns] safeObjectAtIndex:0] dataCell] cellSizeForBounds:frame].height;
-	
-	[self setRowHeight:ceil(height)];
+	//CGFloat height = [[[[self tableColumns] safeObjectAtIndex:0] dataCell] cellSizeForBounds:frame].height;
+	//[self setRowHeight:ceil(height)];
 	[self setNeedsDisplay:YES];
 }
 

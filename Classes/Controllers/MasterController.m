@@ -116,6 +116,7 @@
 	viewTheme.name = [Preferences themeName];
 	
 	tree.theme = viewTheme.other;
+    [tree setSelectionHighlightStyle:NSTableViewSelectionHighlightStyleSourceList];
 	memberList.theme = viewTheme.other;
 	
 	MemberListViewCell *cell = [MemberListViewCell initWithTheme:viewTheme.other];

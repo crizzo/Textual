@@ -1063,6 +1063,10 @@
 	return ([item numberOfChildren] > 0);
 }
 
+- (BOOL)outlineView:(NSOutlineView *)sender isGroupItem:(id)item {
+    return [item numberOfChildren] > 0;
+}
+
 - (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(IRCTreeItem *)item
 {
 	if (PointerIsEmpty(item)) return [clients safeObjectAtIndex:index];

@@ -440,7 +440,6 @@
 		4C5AEF1A12D1B6A900D6B18C /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4C5AEF1B12D1B6A900D6B18C /* Textual_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Textual_Prefix.pch; sourceTree = "<group>"; };
 		4C5AEF1D12D1B6A900D6B18C /* ValidateReceipt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ValidateReceipt.m; sourceTree = "<group>"; };
-		4C5AEF2412D1B6E400D6B18C /* application.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = application.icns; sourceTree = "<group>"; };
 		4C5AEF2712D1B6E400D6B18C /* DIbadge_Green_1&2.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "DIbadge_Green_1&2.tiff"; sourceTree = "<group>"; };
 		4C5AEF2812D1B6E400D6B18C /* DIbadge_Green_3.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = DIbadge_Green_3.tiff; sourceTree = "<group>"; };
 		4C5AEF2912D1B6E400D6B18C /* DIbadge_Green_4.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = DIbadge_Green_4.tiff; sourceTree = "<group>"; };
@@ -711,6 +710,7 @@
 		78A8C1A111737F660044E7A1 /* TextFieldWithDisabledState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextFieldWithDisabledState.m; sourceTree = "<group>"; };
 		78A8C1A311737F660044E7A1 /* ThinSplitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThinSplitView.m; sourceTree = "<group>"; };
 		78A8C1A511737F660044E7A1 /* TreeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TreeView.m; sourceTree = "<group>"; };
+		7DF6E92312D98E9A00B0ED98 /* application.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = application.icns; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -956,7 +956,7 @@
 		4C5AEF2312D1B6E400D6B18C /* Application */ = {
 			isa = PBXGroup;
 			children = (
-				4C5AEF2412D1B6E400D6B18C /* application.icns */,
+				7DF6E92312D98E9A00B0ED98 /* application.icns */,
 			);
 			path = Application;
 			sourceTree = "<group>";
