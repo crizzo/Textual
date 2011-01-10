@@ -30,6 +30,13 @@
 	if ((self = [super init])) {
 		mode = [IRCChannelMode new];
 		members = [NSMutableArray new];
+        groups = [NSMutableArray new];
+        [groups addObject:[[MemberGroup alloc] initWithMark:'~']];
+        [groups addObject:[[MemberGroup alloc] initWithMark:'&']];
+        [groups addObject:[[MemberGroup alloc] initWithMark:'@']];
+        [groups addObject:[[MemberGroup alloc] initWithMark:'%']];
+        [groups addObject:[[MemberGroup alloc] initWithMark:'+']];
+        [groups addObject:[[MemberGroup alloc] initWithMark:' ']];
 	}
 	
 	return self;
@@ -137,6 +144,8 @@
 {
 	isActive = YES;
 	
+	[members removeAllObjects];
+    for (id g in groups) [[g users] removeAllObjects];
 	[mode clear];
 	[members removeAllObjects];
 	
@@ -152,6 +161,7 @@
 	errLastJoin = NO;
 	
 	[self reloadMemberList];
+    [client.world.memberList expandItem:nil expandChildren:YES];
 }
 
 - (void)deactivate
@@ -160,6 +170,7 @@
 	
 	[members removeAllObjects];
 	
+    for (id g in groups) [[g users] removeAllObjects];
 	isOp = NO;
 	isHalfOp = NO;
 	
@@ -371,6 +382,7 @@
 {
 	[members removeAllObjects];
 	
+    for (id g in groups) [[g users] removeAllObjects];
 	[self reloadMemberList];
 }
 
@@ -402,7 +414,22 @@
 
 - (IRCUser *)memberAtIndex:(NSInteger)index
 {
-	return [members safeObjectAtIndex:index];
+    return [members safeObjectAtIndex:index];
+}
+
+- (IRCUser *)memberAtRow:(NSInteger)index
+{
+	int r = index;
+    int x = 0;
+    int go = 0;
+    for (MemberGroup *g in groups) {
+        if ([[g users] count] > 0) {
+            go += 1;
+            x += [[g users] count] + 1;
+            if (x >= r) break;
+        }
+    }
+    return [self memberAtIndex:r - go];
 }
 
 - (IRCUser *)findMember:(NSString *)nick
@@ -426,9 +453,32 @@
 	return members.count;
 }
 
+- (NSArray *)types {
+    NSMutableArray *a = [NSMutableArray new];
+    for (MemberGroup *g in groups)
+        [a addObject:[NSString stringWithChar:[g mark]]];
+    return a;
+}
+
 - (void)reloadMemberList
 {
 	if (client.world.selected == self) {
+        for (id g in groups) [[g users] removeAllObjects];
+        
+        NSMutableDictionary *d = [NSMutableDictionary new];
+        for (MemberGroup *m in groups) {
+            NSString *s = [NSString stringWithChar:[m mark]];
+            [d setObject:m forKey:s];
+        }
+
+        for (int i = 0; i < [members count]; i++) {
+            IRCUser *u = [members objectAtIndex:i];
+            NSString *g = [NSString stringWithChar:[u mark]];
+            MemberGroup *m = [d objectForKey:g];
+            
+            [[m users] addObject:u];
+        }
+            
 		[client.world.memberList reloadData];
 	}
 }
@@ -464,17 +514,52 @@
 }
 
 #pragma mark -
-#pragma mark NSTableView Delegate
+#pragma mark NSOutlineView Delegate
 
-- (NSInteger)numberOfRowsInTableView:(NSTableView *)sender
-{
-	return members.count;
+- (id)notemptygroups {
+    NSMutableArray *a = [NSMutableArray new];
+    for (MemberGroup *g in groups) if ([[g users] count]) [a addObject:g];
+    return a;
 }
 
-- (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
+- (NSInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(MemberGroup *)item
+{
+    if (item != nil) return [[item users] count];
+    else return [[self notemptygroups] count];
+}
+
+- (id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item
+{
+    id ret = nil;
+	if ([item isKindOfClass:[MemberGroup class]]) {
+        ret = [(MemberGroup *) item name];
+        if ([[item users] count] == 0) ret = nil;
+    } else {
+        int i = [item intValue];
+        MemberGroup *g = [groups objectAtIndex:i >> 24];
+        int x = i & 0x00FFFFFF;
+        IRCUser *u = [[g users] objectAtIndex:x];
+        ret = [u nick];
+    }
+    return ret;
+}
+
+- (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(MemberGroup *)item
+{
+    id ret = nil;
+    if (item != nil) ret = [[NSNumber numberWithInt:index | ([groups indexOfObject:item] << 24)] retain];
+    else ret = [[self notemptygroups] objectAtIndex:index];
+    return ret;
+}
+
+- (BOOL)outlineView:(NSOutlineView *)sender isGroupItem:(id)item {
+    return [item isKindOfClass:[MemberGroup class]];
+}
+
+/*- (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
 {
 	return ([client.world.viewTheme.other.memberListFont pointSize] + 3.0); // Long callback
-}
+}*/
 
 - (id)tableView:(NSTableView *)sender objectValueForTableColumn:(NSTableColumn *)column row:(NSInteger)row
 {
@@ -483,9 +568,43 @@
 	return TXTFLS(@"ACCESSIBILITY_MEMBER_LIST_DESCRIPTION", [user nick], [config.name safeSubstringFromIndex:1]);
 }
 
-- (void)tableView:(NSTableView *)sender willDisplayCell:(MemberListViewCell *)cell forTableColumn:(NSTableColumn *)column row:(NSInteger)row
+- (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item {
+    return [item isKindOfClass:[MemberGroup class]];
+}
+
+- (BOOL)outlineView:(NSOutlineView *)outlineView shouldSelectItem:(id)item
 {
-	cell.member = [members safeObjectAtIndex:row];
+    return ![item isKindOfClass:[MemberGroup class]];
 }
 
 @end
+
+
+@implementation MemberGroup
+@synthesize mark;
+@synthesize users;
+- (id)initWithMark:(char)m 
+{
+    self = [super init];
+    mark = m;
+    users = [[NSMutableArray new] retain];
+    return self;
+}
+- (NSString *)name {
+    switch(mark) {
+        case '~': return @"OWNER";
+        case '&': return @"PROTECTED";
+        case '@': return @"OPERATOR";
+        case '%': return @"HALFOP";
+        case '+': return @"VOICE";
+        case ' ': return @"NORMAL";
+    }
+    return nil;
+}
+- (NSString *)description {
+    return [NSString stringWithFormat:@"<MemberGroup mark=%c count=%d>", mark, [users count]];
+}
+@end
+
+
+

@@ -71,9 +71,9 @@ a:hover {
   opacity: 0.95;
   font-size: 13px;
   position: fixed;
-  background: #DEE4EA;
+  background: #dee4ea;
   padding: 2px 0.5em 3px;
-  border-bottom: 1px solid #8387B6;
+  border-bottom: 1px solid #cbcbcb;
 }
 
 #topic_bar a {

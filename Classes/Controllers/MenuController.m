@@ -360,26 +360,18 @@
 	} else {
 		NSIndexSet *indexes = [memberList selectedRowIndexes];
 		
-		if (NSObjectIsNotEmpty(indexes) && NSObjectIsEmpty(pointedNick)) {
-			for (NSNumber *index in [indexes arrayFromIndexSet]) {
-				NSUInteger nindex = [index unsignedIntegerValue];
-				
-				IRCUser *m = [c memberAtIndex:nindex];
-				
-				if (m) {
-					[ary safeAddObject:m];
-				}
-			}
-		} else {
-			if (NSObjectIsNotEmpty(pointedNick)) {
-				IRCUser *m = [c findMember:pointedNick];
-				
-				if (m) {
-					[ary safeAddObject:m];
-				} 
-                
-                [pointedNick autodrain];
-                pointedNick = nil;
+		for (NSUInteger i = [indexes firstIndex]; i != NSNotFound; i = [indexes indexGreaterThanIndex:i]) {
+			IRCUser *m = [c memberAtRow:i];
+			[ary addObject:m];
+		}
+		
+		if ([ary isEqualToArray:[NSMutableArray array]]) {
+			IRCUser *m = [c findMember:pointedNick];
+			
+			if (m) {
+				return [NSArray arrayWithObject:m];
+			} else {
+				return [NSArray array];
 			}
 		}
 	}

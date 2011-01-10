@@ -689,8 +689,13 @@
 {
 	[memberList setFont:viewTheme.other.memberListFont];
 	
+<<<<<<< HEAD
 	[[[[memberList tableColumns] safeObjectAtIndex:0] dataCell] themeChanged];
 	
+=======
+	[memberList setFont:theme.memberListFont];
+	//[[[[memberList tableColumns] safeObjectAtIndex:0] dataCell] themeChanged];
+>>>>>>> Rewrote user list to be sectioned (and more Mac-like), horrible pile of lame hacks.
 	[memberList themeChanged];
 	[memberList setNeedsDisplay];
 }
@@ -1076,7 +1081,8 @@
 
 - (id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item
 {
-	return [item label];
+	if ([item numberOfChildren] > 0) return [[item label] uppercaseString];
+    else return [item label];
 }
 
 - (void)outlineViewSelectionIsChanging:(NSNotification *)note
@@ -1121,12 +1127,16 @@
 		
 		memberList.dataSource = selected;
 		memberList.delegate = selected;
-		[memberList reloadData];
+		[selected reloadMemberList];
 	}
 	
 	[memberList deselectAll:nil];
 	[memberList scrollRowToVisible:0];
+<<<<<<< HEAD
 	
+=======
+    [memberList expandItem:nil expandChildren:YES];
+>>>>>>> Rewrote user list to be sectioned (and more Mac-like), horrible pile of lame hacks.
 	[selected.log.view clearSelection];
 	
 	if ([Preferences inputHistoryIsChannelSpecific]) {

@@ -4,6 +4,17 @@
 
 @class IRCClient;
 
+@interface MemberGroup : NSObject {
+    char mark;
+    NSMutableArray *users;
+}
+@property (nonatomic, readonly) char mark;
+@property (nonatomic, readonly) NSMutableArray *users;
+- (NSString *)name;
+- (id)initWithMark:(char)m;
+@end
+
+
 @interface IRCChannel : IRCTreeItem
 {
 	IRCClient *client;
@@ -11,7 +22,7 @@
 	IRCChannelConfig *config;
 	
 	NSMutableArray *members;
-	
+    NSMutableArray *groups;
 	NSString *topic;
 	NSString *storedTopic;
 	
@@ -81,6 +92,7 @@
 - (void)clearMembers;
 
 - (IRCUser *)memberAtIndex:(NSInteger)index;
+- (IRCUser *)memberAtRow:(NSInteger)index;
 - (IRCUser *)findMember:(NSString *)nick;
 - (IRCUser *)findMember:(NSString *)nick options:(NSStringCompareOptions)mask;
 - (NSInteger)indexOfMember:(NSString *)nick;

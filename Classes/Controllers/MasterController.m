@@ -120,7 +120,9 @@
 	memberList.theme = viewTheme.other;
 	
 	MemberListViewCell *cell = [MemberListViewCell initWithTheme:viewTheme.other];
-	[[[memberList tableColumns] safeObjectAtIndex:0] setDataCell:cell];
+    [memberList setSelectionHighlightStyle:NSTableViewSelectionHighlightStyleSourceList];
+	//MemberListViewCell *cell = [MemberListViewCell initWithTheme:viewTheme.other];
+	//[[[memberList tableColumns] safeObjectAtIndex:0] setDataCell:cell];
 	
 	[self loadWindowState];
 	[self setColumnLayout];

@@ -79,44 +79,4 @@
 	gradient = [[NSGradient alloc] initWithStartingColor:start endingColor:end];
 }
 
-- (NSColor *)_highlightColorForCell:(NSCell *)cell
-{
-	return nil;
-}
-
-- (void)_highlightRow:(NSInteger)row clipRect:(NSRect)clipRect
-{
-	if ([NSApp isActive] == NO) return;
-	
-	NSRect frame = [self rectOfRow:row];
-	NSRect rect = frame;
-	
-	rect.origin.y += 1;
-	rect.size.height -= 2;
-	
-	[gradient drawInRect:rect angle:90];
-	
-	[topLineColor set];
-	
-	rect = frame;
-	rect.size.height = 1;
-	
-	NSRectFill(rect);
-	
-	[bottomLineColor set];
-	
-	rect = frame;
-	rect.origin.y += (rect.size.height - 1);
-	rect.size.height = 1;
-	
-	NSRectFill(rect);
-}
-
-- (void)drawBackgroundInClipRect:(NSRect)rect
-{
-	[bgColor set];
-	
-	NSRectFill(rect);
-}
-
 @end

@@ -4,7 +4,7 @@
 
 @class IRCWorld, IRCClient, IRCChannel, InputHistory, LogController;
 
-@interface IRCTreeItem : NSObject <NSTableViewDataSource, NSTableViewDelegate>
+@interface IRCTreeItem : NSObject <NSOutlineViewDataSource, NSOutlineViewDelegate>
 {
 	NSInteger uid;
 	
