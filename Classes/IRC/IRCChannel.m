@@ -420,8 +420,8 @@
 - (IRCUser *)memberAtRow:(NSInteger)index
 {
 	int r = index;
-    int x = 0;
-    int go = 0;
+    int go = 0;int x = 0;
+    
     for (MemberGroup *g in groups) {
         if ([[g users] count] > 0) {
             go += 1;
