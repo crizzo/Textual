@@ -689,13 +689,7 @@
 {
 	[memberList setFont:viewTheme.other.memberListFont];
 	
-<<<<<<< HEAD
-	[[[[memberList tableColumns] safeObjectAtIndex:0] dataCell] themeChanged];
-	
-=======
-	[memberList setFont:theme.memberListFont];
 	//[[[[memberList tableColumns] safeObjectAtIndex:0] dataCell] themeChanged];
->>>>>>> Rewrote user list to be sectioned (and more Mac-like), horrible pile of lame hacks.
 	[memberList themeChanged];
 	[memberList setNeedsDisplay];
 }
@@ -1132,11 +1126,8 @@
 	
 	[memberList deselectAll:nil];
 	[memberList scrollRowToVisible:0];
-<<<<<<< HEAD
 	
-=======
     [memberList expandItem:nil expandChildren:YES];
->>>>>>> Rewrote user list to be sectioned (and more Mac-like), horrible pile of lame hacks.
 	[selected.log.view clearSelection];
 	
 	if ([Preferences inputHistoryIsChannelSpecific]) {
@@ -1169,23 +1160,25 @@
 - (void)outlineView:(NSOutlineView *)outlineView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn item:(id)item
 {
 	IRCTreeItem *i = item;
-	
+
 	NSColor *color = nil;
+    
+    BOOL selected = i == [tree itemAtRow:[tree selectedRow]];
 	
-	if (i.isKeyword) {
-		color = viewTheme.other.treeHighlightColor;
-	} else if (i.isNewTalk) {
+	if (i.isKeyword && !selected) {
+        color = viewTheme.other.treeHighlightColor;
+	} else if (i.isNewTalk && !selected) {
 		color = viewTheme.other.treeNewTalkColor;
-	} else if (i.isUnread) {
+	} else if (i.isUnread && !selected) {
 		color = viewTheme.other.treeUnreadColor;
 	} else if (i.isActive) {
-		if (i == [tree itemAtRow:[tree selectedRow]]) {
+		if (selected) {
 			color = viewTheme.other.treeSelActiveColor;
 		} else {
 			color = viewTheme.other.treeActiveColor;
 		}
 	} else {
-		if (i == [tree itemAtRow:[tree selectedRow]]) {
+		if (selected) {
 			color = viewTheme.other.treeSelInactiveColor;
 		} else {
 			color = viewTheme.other.treeInactiveColor;
